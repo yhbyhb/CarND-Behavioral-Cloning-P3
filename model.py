@@ -28,13 +28,14 @@ def generator(samples, batch_size=32):
             for batch_sample in batch_samples:
                 name = os.path.join(data_path, 'IMG/') + batch_sample[0].split('/')[-1]
                 center_image = cv2.imread(name)
+                center_image = cv2.cvtColor(center_image, cv2.COLOR_BGR2RGB)
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
 
-                # # data augmentation
-                # images.append(cv2.flip(center_image, 1))
-                # angles.append(center_angle * -1.0)
+                # data augmentation
+                images.append(cv2.flip(center_image, 1))
+                angles.append(center_angle * -1.0)
 
             # trim image to only see section with road
             X_train = np.array(images)
@@ -48,7 +49,6 @@ validation_generator = generator(validation_samples)
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Activation, Cropping2D
 from keras.layers.convolutional import Convolution2D
-from keras.layers.pooling import MaxPooling2D
 
 model = Sequential()
 model.add(Cropping2D(cropping=((50,20), (0,0)), input_shape=(160,320,3)))
@@ -58,7 +58,6 @@ model.add(Convolution2D(36, 5, 5, subsample=(2,2), activation='relu'))
 model.add(Convolution2D(48, 5, 5, subsample=(2,2), activation='relu'))
 model.add(Convolution2D(64, 3, 3, activation='relu'))
 model.add(Convolution2D(64, 3, 3, activation='relu'))
-model.add(MaxPooling2D())
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))
@@ -66,9 +65,9 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples),
+history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples) * 2,
                     validation_data=validation_generator,
-                    nb_val_samples=len(validation_samples), nb_epoch=5)
+                    nb_val_samples=len(validation_samples) * 2, nb_epoch=5)
 
 model.save('model.h5')
 
