@@ -33,10 +33,6 @@ def generator(samples, batch_size=32):
                 images.append(center_image)
                 angles.append(center_angle)
 
-                # data augmentation
-                images.append(cv2.flip(center_image, 1))
-                angles.append(center_angle * -1.0)
-
             # trim image to only see section with road
             X_train = np.array(images)
             y_train = np.array(angles)
@@ -51,7 +47,7 @@ from keras.layers import Flatten, Dense, Lambda, Activation, Cropping2D
 from keras.layers.convolutional import Convolution2D
 
 model = Sequential()
-model.add(Cropping2D(cropping=((50,20), (0,0)), input_shape=(160,320,3)))
+model.add(Cropping2D(cropping=((65,25), (0,0)), input_shape=(160,320,3)))
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 model.add(Convolution2D(24, 5, 5, subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36, 5, 5, subsample=(2,2), activation='relu'))
@@ -65,9 +61,9 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples) * 2,
+history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples),
                     validation_data=validation_generator,
-                    nb_val_samples=len(validation_samples) * 2, nb_epoch=5)
+                    nb_val_samples=len(validation_samples), nb_epoch=5)
 
 model.save('model.h5')
 
@@ -83,4 +79,5 @@ plt.title('model mean squared error loss')
 plt.ylabel('mean squared error loss')
 plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
-plt.show()
+# plt.show()
+plt.savefig('figure.png')
