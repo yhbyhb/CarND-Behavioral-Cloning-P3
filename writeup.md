@@ -10,13 +10,14 @@ For the network model codes, Check [`model.py`](./model.py).
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[normal_lap]: ./writeup_images/normal_lap_center_2017_08_20_12_25_15_918.jpg "Normal lap"
+[normal_lap_reverse]: ./writeup_images/normal_lap_reverse_center_2017_08_20_13_14_29_145.jpg "Reverse normal lap"
+[recovery_from_left]: ./writeup_images/recovery_from_left_center_2017_08_20_13_19_22_136.jpg "Recovery from left"
+[recovery_from_right]: ./writeup_images/recovery_from_right_center_2017_08_20_13_22_03_742.jpg "Recovery from right"
+[turn_left]: ./writeup_images/turn_left_center_2017_08_20_17_42_33_607.jpg "Turn left"
+[turn_right]: ./writeup_images/turn_right_center_2017_08_20_17_58_09_395.jpg "Turn right"
+[cropped]: ./writeup_images/cropped_center_2017_08_20_12_25_15_918.png "cropped normal lap"
+[plot_loss]: ./writeup_images/figure.png "Loss plot "
 
 
 ### Files Submitted 
@@ -38,11 +39,15 @@ Other files
 
 #### Model architecture 
 
-I used [NVIDIA's architecture](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) and it worked very well. It contains 5 convolutional layers and 3 fully connected layers. relu activation is used after Each convolutional layer. First three conv layers has 5x5 kernel and stride 2, last two conv layers has 3x3 kernel with stride 1. All conv layer are padded 'valid'.
+Final model that I used is the [NVIDIA's architecture](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) and it worked very well. It contains 5 convolutional layers and 3 fully connected layers. relu activation is used after Each convolutional layer. First three conv layers has 5x5 kernel and stride 2, last two conv layers has 3x3 kernel with stride 1. All conv layer are padded 'valid'.
 
 #### Training strategy
 
-I followed general guide line of project description.
+I followed the general guide line of project description.
+- three laps of center lane driving
+- some data (about one lap) recovery driving from the sides
+- Many data focusing on driving smoothly around curves
+
 The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### Model parameter tuning
@@ -69,22 +74,44 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 #### Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded three laps on track one using center lane driving normal and reverse directions. Here is an example image of center lane driving:
+To capture good driving behavior, I first recorded three laps on track one using center lane driving normal and reverse directions. Here are examples image of center lane driving, left is normal and right is reverse.
 
-![alt text][image2]
+![alt text][normal_lap]
+![alt text][normal_lap_reverse]
 
-Then I recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover center line. 
+Then I recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover center line.
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+![alt text][recovery_from_left]
+![alt text][recovery_from_right]
 
 Then I recorded left turns and right turns. Especially, I recorded sharp turns a lot.
 
-![alt text][image6]
-![alt text][image7]
+![alt text][turn_left]
+![alt text][turn_right]
 
-After the collection process, I had X number of data points. I then preprocessed this data by reordering color channel from BGR to RGB since drive.py use RGB format and cv2.imread() read image with BGR format. Top 65 pixels and bottom 25 pixels are cropped. Data Normalization are applied for the fast and stable training.
+After the collection process, I had 23310 number of data points. Below table shows the number of each training data that I split into 6 categories and count.
 
-I finally randomly shuffled the data set and put 20% of the data into a validation set. 
-5 epochs are used for training.
+| Data recorded      | Count |
+|:-------------------|------:|
+| Normal lap | 5176 |
+| Reversed normal lap | 5447 |
+| Recovery from left | 1104 |
+| Recovery from right | 1343 |
+| Turn left | 5312 |
+| Turn right | 4928 |
+
+
+I then preprocessed this data by reordering color channel from BGR to RGB since drive.py use RGB format and cv2.imread() read image with BGR format. Top 65 pixels and bottom 25 pixels are cropped. Data Normalization are applied for the fast and stable training.
+
+For example, here is a cropped image and its original.
+
+![alt text][cropped]
+![alt text][normal_lap]
+
+I finally randomly shuffled the data set and put 20% of the data into a validation set.
+5 epochs are used for training. Both training and validation loss were decreased.
+
+![alt text][plot_loss]
+
+## Reflections
+I used suggested or well-known architecture (NVIDIA's) and focused to handle the dataset. Low loss didn't guarantee successful autonomous driving but I referred as an index for overfitting. The keys of this project were categorizing dataset and getting enough data from driving corner.
