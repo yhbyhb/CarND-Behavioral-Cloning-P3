@@ -4,14 +4,14 @@
 Contents
 ---
 Required files
-- `model.py` : script used to create and train the model
 - `drive.py` : script to drive the car - nothing changed
 - `model.h5` : a trained Keras model
-- `writeup.md` : a report writeup file 
+- `model.py` : script used to create and train the model
 - `video.mp4` : a video recording of vehicle driving autonomously around the track. (two full laps)
+- `writeup.md` : a report writeup file 
 
-Helper files
-- `video.py` : script to make video file
-- `figure.png` : training history plot file. contains training and validation loss.
-- `merge_data.py` : helper file for merging training data
+Other files
 - `README.md` : this file
+- `video.py` : script to make video file
+- `helper/` : helper python script files for this project
+- `writeup_images/` : images for writeup

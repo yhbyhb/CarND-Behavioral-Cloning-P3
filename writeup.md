@@ -22,17 +22,17 @@ For the network model codes, Check [`model.py`](./model.py).
 ### Files Submitted 
 My project includes the following files, required and helper:
 Required
-- `model.py` containing the script to create and train the model
 - `drive.py` for driving the car in autonomous mode
 - `model.h5` containing a trained convolution neural network 
-- `writeup.md` summarizing the results. This file. 
+- `model.py` containing the script to create and train the model
 - `video.mp4` a video recording of vehicle driving autonomously around the track. (two full laps)
+- `writeup.md` summarizing the results. This file. 
 
-Helper files
-- `video.py` script to make video file
-- `figure.png` training history plot file. contains training and validation loss.
-- `merge_data.py` helper file for merging training data.
+Other files
 - `README.md` containing simple descriptions of files.
+- `video.py` script to make video file
+- `helper/`  helper python script files for this project
+- `writeup_images/` images for writeup
 
 ### Model Architecture and Training Strategy
 
