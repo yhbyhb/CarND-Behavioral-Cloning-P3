@@ -11,11 +11,11 @@ src_list = ['data_normal_lap',
             ]
 
 dst = 'data'
-dst_path = os.path.join(dst, 'IMG')
+dst_path = os.path.join('../', dst, 'IMG')
 os.mkdir(dst_path)
 
 for src in src_list:
-    src_path = os.path.join(src, 'IMG')
+    src_path = os.path.join('../', src, 'IMG')
     print(src_path)
     src_files = os.listdir(src_path)
     print(len(src_files))
@@ -28,10 +28,10 @@ for src in src_list:
 
 
 csv_filename = 'driving_log.csv'
-dst_csv = os.path.join(dst, csv_filename)
+dst_csv = os.path.join('../', dst, csv_filename)
 with open(dst_csv, 'w') as outfile:
     for src in src_list:
-        fname = os.path.join(src, csv_filename)
+        fname = os.path.join('../', src, csv_filename)
         with open(fname) as infile:
             for line in infile:
                 outfile.write(line)

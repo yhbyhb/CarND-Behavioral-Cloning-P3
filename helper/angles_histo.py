@@ -2,7 +2,7 @@ import csv
 import cv2
 
 lines = []
-with open('data/driving_log.csv') as csvfile:
+with open('../data/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		lines.append(line)
